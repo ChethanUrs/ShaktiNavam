@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival Food Recipes - ShaktiNavam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Laila:wght@400;700&family=Teko:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #f7b600;
+            --royal-purple: #4B0082;
+            --deep-red: #8B0000;
+            --royal-indigo: #240046;
+            --dark-bg: #10002b;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Laila', serif;
+            background-color: var(--dark-bg);
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Teko', sans-serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        .navbar {
+            background: rgba(16, 0, 43, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--primary-gold);
+        }
+        .nav-link {
+            position: relative;
+            color: #f0f0f0;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-gold);
+            transition: width 0.3s;
+        }
+        .nav-link:hover {
+            color: var(--primary-gold);
+            text-shadow: 0 0 5px var(--primary-gold);
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .section-container {
+            padding-top: 8rem; 
+            padding-bottom: 5rem;
+        }
+        .section-title {
+            font-size: 4rem;
+            color: var(--primary-gold);
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px var(--primary-gold);
+        }
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 4rem;
+            color: #e0e0e0;
+        }
+
+        /* Recipe Card Flip Styles */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+        .recipe-card {
+            background-color: transparent;
+            width: 100%;
+            height: 450px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .recipe-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        }
+        .recipe-card.is-flipped .recipe-card-inner {
+            transform: rotateY(180deg);
+        }
+        .recipe-card-front, .recipe-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            border-radius: 15px;
+            border: 2px solid var(--royal-purple);
+        }
+        .recipe-card-front {
+            background-color: var(--royal-indigo);
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        .recipe-card-front img {
+            width: 100%;
+            height: 70%;
+            object-fit: cover;
+            border-top-left-radius: 13px;
+            border-top-right-radius: 13px;
+        }
+        .recipe-card-front h3 {
+            font-size: 2.5rem;
+            color: var(--primary-gold);
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        .recipe-card-back {
+            background-color: var(--royal-indigo);
+            color: #f0f0f0;
+            transform: rotateY(180deg);
+            padding: 1.5rem;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .recipe-card-back h4 {
+            font-size: 1.8rem;
+            color: var(--secondary-gold);
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid var(--primary-gold);
+            padding-bottom: 0.25rem;
+        }
+        .recipe-card-back ul, .recipe-card-back ol {
+            margin-left: 1rem;
+            margin-bottom: 1rem;
+            list-style-position: inside;
+        }
+        .recipe-card-back ul li, .recipe-card-back ol li {
+             margin-bottom: 0.25rem;
+        }
+
+
+        /* Footer */
+        .footer-icon svg { width: 32px; height: 32px; transition: all 0.3s ease; }
+        .footer-icon:hover svg { color: var(--primary-gold); transform: scale(1.2); }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar fixed top-0 left-0 right-0 z-50 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold text-yellow-400 font-['Teko']">ShaktiNavam</a>
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="planner.html" class="nav-link">Tour Planner</a>
+                <a href="know_more.html" class="nav-link">Know More</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="music_dance.html" class="nav-link">Music & Dance</a>
+                <a href="quiz.html" class="nav-link">Quiz</a>
+            </div>
+             <button id="menu-btn" class="md:hidden text-2xl text-white">☰</button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden p-4 space-y-2"></div>
+    </nav>
+
+    <div class="container mx-auto px-4">
+        <section id="recipes" class="section-container">
+            <h2 class="section-title">Flavors of the Festival</h2>
+            <p class="section-subtitle">Click on any dish to reveal its traditional recipe!</p>
+            
+            <div class="recipe-grid">
+                <!-- Recipe Card 1: Chitranna -->
+                <div class="recipe-card">
+                    <div class="recipe-card-inner">
+                        <div class="recipe-card-front">
+                            <img src="https://images.unsplash.com/photo-1606843048212-d8c15b5a7e6d?q=80&w=800&auto=format&fit=crop" alt="Chitranna (Lemon Rice)">
+                            <h3>Chitranna</h3>
+                        </div>
+                        <div class="recipe-card-back">
+                            <h4>Ingredients</h4>
+                            <ul class="list-disc">
+                                <li>2 cups cooked rice</li>
+                                <li>3 tbsp oil</li>
+                                <li>1 tsp mustard seeds</li>
+                                <li>1 tsp urad dal, chana dal</li>
+                                <li>Handful of peanuts</li>
+                                <li>2 green chilies, slit</li>
+                                <li>Pinch of asafoetida (hing)</li>
+                                <li>1/2 tsp turmeric powder</li>
+                                <li>Juice of 2 lemons</li>
+                                <li>Salt to taste</li>
+                                <li>Fresh coriander for garnish</li>
+                            </ul>
+                            <h4>Instructions</h4>
+                            <ol class="list-decimal">
+                                <li>Heat oil in a pan. Add mustard seeds, dals, and peanuts. Sauté until golden.</li>
+                                <li>Add green chilies, curry leaves, and asafoetida.</li>
+                                <li>Add turmeric powder and turn off the heat.</li>
+                                <li>Pour this tempering over the cooked rice. Add lemon juice and salt.</li>
+                                <li>Mix gently until well combined. Garnish with coriander.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe Card 2: Hayagreeva Maddi -->
+                <div class="recipe-card">
+                    <div class="recipe-card-inner">
+                        <div class="recipe-card-front">
+                            <img src="https://www.vegrecipesofindia.com/wp-content/uploads/2021/10/hayagreeva-maddi-1.jpg" alt="Hayagreeva Maddi">
+                            <h3>Hayagreeva Maddi</h3>
+                        </div>
+                        <div class="recipe-card-back">
+                            <h4>Ingredients</h4>
+                            <ul class="list-disc">
+                                <li>1/2 cup chana dal (Bengal gram)</li>
+                                <li>1/2 cup jaggery, grated</li>
+                                <li>2 tbsp ghee</li>
+                                <li>1 tbsp cashews & raisins</li>
+                                <li>1/4 cup grated dry coconut (kopra)</li>
+                                <li>1/4 tsp cardamom powder</li>
+                                <li>1.5 cups water</li>
+                            </ul>
+                            <h4>Instructions</h4>
+                            <ol class="list-decimal">
+                                <li>Pressure cook chana dal with 1.5 cups of water until soft but not mushy.</li>
+                                <li>In a pan, melt jaggery with a little water to form a syrup.</li>
+                                <li>Add the cooked dal to the jaggery syrup and cook until it thickens.</li>
+                                <li>In another small pan, heat ghee and fry cashews and raisins until golden.</li>
+                                <li>Add the fried nuts, coconut, and cardamom powder to the dal mixture. Mix well and serve.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe Card 3: Kosambari -->
+                <div class="recipe-card">
+                    <div class="recipe-card-inner">
+                        <div class="recipe-card-front">
+                            <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2022/03/kosambari-recipe-moong-dal-salad.jpg" alt="Kosambari Salad">
+                            <h3>Kosambari</h3>
+                        </div>
+                        <div class="recipe-card-back">
+                             <h4>Ingredients</h4>
+                            <ul class="list-disc">
+                                <li>1/2 cup moong dal, soaked for 2 hours</li>
+                                <li>1 cucumber, finely chopped</li>
+                                <li>1 carrot, grated</li>
+                                <li>2 tbsp fresh coconut, grated</li>
+                                <li>1 green chili, finely chopped</li>
+                                <li>Juice of 1/2 lemon</li>
+                                <li>Salt to taste</li>
+                                <li>For tempering: 1 tsp oil, 1/2 tsp mustard seeds, pinch of asafoetida</li>
+                            </ul>
+                            <h4>Instructions</h4>
+                            <ol class="list-decimal">
+                                <li>Drain the soaked moong dal completely.</li>
+                                <li>In a bowl, combine dal, cucumber, carrot, coconut, and green chili.</li>
+                                <li>Prepare tempering by heating oil and popping mustard seeds. Add asafoetida.</li>
+                                <li>Pour the tempering over the dal mixture. Add salt and lemon juice.</li>
+                                <li>Mix everything well and serve immediately.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe Card 4: Shavige Payasa -->
+                <div class="recipe-card">
+                    <div class="recipe-card-inner">
+                        <div class="recipe-card-front">
+                            <img src="https://images.unsplash.com/photo-1628179459037-e5124e1848a3?q=80&w=800&auto=format&fit=crop" alt="Shavige Payasa (Vermicelli Kheer)">
+                            <h3>Shavige Payasa</h3>
+                        </div>
+                        <div class="recipe-card-back">
+                             <h4>Ingredients</h4>
+                            <ul class="list-disc">
+                                <li>1 cup roasted vermicelli (shavige)</li>
+                                <li>1 litre full-fat milk</li>
+                                <li>3/4 cup sugar (or to taste)</li>
+                                <li>2 tbsp ghee</li>
+                                <li>10-12 cashews</li>
+                                <li>1 tbsp raisins</li>
+                                <li>1/2 tsp cardamom powder</li>
+                            </ul>
+                            <h4>Instructions</h4>
+                            <ol class="list-decimal">
+                                <li>In a heavy-bottomed pan, heat ghee and fry cashews and raisins until golden. Set aside.</li>
+                                <li>If using un-roasted vermicelli, fry it in the same ghee until golden.</li>
+                                <li>Boil the milk in a separate pot. Once it boils, add the roasted vermicelli.</li>
+                                <li>Cook on low heat, stirring occasionally, until the vermicelli is soft.</li>
+                                <li>Add sugar and stir until it dissolves completely.</li>
+                                <li>Finally, add cardamom powder and the fried nuts. Serve warm or chilled.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe Card 5: Mysore Pak -->
+                <div class="recipe-card">
+                    <div class="recipe-card-inner">
+                        <div class="recipe-card-front">
+                            <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2021/11/mysore-pak-recipe.jpg" alt="Mysore Pak">
+                            <h3>Mysore Pak</h3>
+                        </div>
+                        <div class="recipe-card-back">
+                             <h4>Ingredients</h4>
+                            <ul class="list-disc">
+                                <li>1 cup besan (gram flour)</li>
+                                <li>1 cup ghee</li>
+                                <li>2 cups sugar</li>
+                                <li>1 cup water</li>
+                            </ul>
+                            <h4>Instructions</h4>
+                            <ol class="list-decimal">
+                                <li>Sieve the besan to ensure no lumps.</li>
+                                <li>In a pan, combine sugar and water. Bring to a boil to make a one-string consistency syrup.</li>
+                                <li>Slowly add the besan while stirring continuously to avoid lumps.</li>
+                                <li>Once mixed, start adding melted ghee little by little, while constantly stirring.</li>
+                                <li>Continue cooking until the mixture becomes frothy and leaves the sides of the pan.</li>
+                                <li>Pour immediately onto a greased tray. Let it cool slightly before cutting into squares.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe Card 6: Obbattu/Holige -->
+                <div class="recipe-card">
+                    <div class="recipe-card-inner">
+                        <div class="recipe-card-front">
+                            <img src="https://www.vegrecipesofindia.com/wp-content/uploads/2018/03/obbattu-recipe-1.jpg" alt="Obbattu / Holige">
+                            <h3>Obbattu / Holige</h3>
+                        </div>
+                        <div class="recipe-card-back">
+                             <h4>Ingredients</h4>
+                            <ul class="list-disc">
+                                <li>For filling: 1 cup toor dal, 1 cup jaggery, 1/4 tsp cardamom powder.</li>
+                                <li>For dough: 1 cup all-purpose flour (maida), pinch of turmeric, 3 tbsp oil, water.</li>
+                            </ul>
+                            <h4>Instructions</h4>
+                            <ol class="list-decimal">
+                                <li>Cook dal until soft. Drain and mash with jaggery. Cook this mixture until it thickens, then add cardamom. Let it cool.</li>
+                                <li>Make a soft, pliable dough with maida, turmeric, oil, and water. Let it rest for 2 hours.</li>
+                                <li>Make small balls of the filling and dough.</li>
+                                <li>Stuff a filling ball inside a dough ball, seal, and roll it out thinly like a chapati.</li>
+                                <li>Cook on a hot tawa with ghee until golden brown on both sides.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe Card 7: Puliyogare -->
+                <div class="recipe-card">
+                    <div class="recipe-card-inner">
+                        <div class="recipe-card-front">
+                            <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2021/07/puliyogare-recipe.jpg" alt="Puliyogare">
+                            <h3>Puliyogare</h3>
+                        </div>
+                        <div class="recipe-card-back">
+                             <h4>Ingredients</h4>
+                            <ul class="list-disc">
+                                <li>2 cups cooked rice</li>
+                                <li>Small lime-sized tamarind ball</li>
+                                <li>2 tbsp Puliyogare powder/paste</li>
+                                <li>2 tbsp oil</li>
+                                <li>1 tsp mustard seeds</li>
+                                <li>Handful of peanuts</li>
+                                <li>Few curry leaves</li>
+                                <li>Salt to taste</li>
+                            </ul>
+                            <h4>Instructions</h4>
+                            <ol class="list-decimal">
+                                <li>Soak tamarind in hot water and extract thick juice.</li>
+                                <li>Heat oil, add mustard seeds, peanuts, and curry leaves. Sauté until peanuts are crisp.</li>
+                                <li>Add tamarind extract and boil for a few minutes.</li>
+                                <li>Add the Puliyogare powder/paste and salt. Cook until the mixture thickens into a paste.</li>
+                                <li>Let the paste cool, then mix it thoroughly with the cooked rice.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe Card 8: Masala Vada -->
+                <div class="recipe-card">
+                    <div class="recipe-card-inner">
+                        <div class="recipe-card-front">
+                            <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2022/03/masala-vada-recipe-paruppu-vadai.jpg" alt="Masala Vada">
+                            <h3>Masala Vada</h3>
+                        </div>
+                        <div class="recipe-card-back">
+                             <h4>Ingredients</h4>
+                            <ul class="list-disc">
+                                <li>1 cup chana dal, soaked for 2 hours</li>
+                                <li>1 onion, finely chopped</li>
+                                <li>2 green chilies, chopped</li>
+                                <li>1 inch ginger, chopped</li>
+                                <li>Few curry leaves & coriander</li>
+                                <li>1/2 tsp fennel seeds</li>
+                                <li>Salt to taste</li>
+                                <li>Oil for deep frying</li>
+                            </ul>
+                            <h4>Instructions</h4>
+                            <ol class="list-decimal">
+                                <li>Drain the dal and grind it coarsely without water.</li>
+                                <li>Mix the ground dal with onion, chilies, ginger, herbs, fennel seeds, and salt.</li>
+                                <li>Shape the mixture into small, flat patties.</li>
+                                <li>Deep fry in hot oil on medium heat until golden and crispy on both sides.</li>
+                                <li>Serve hot with coconut chutney.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+     <footer class="bg-opacity-50 bg-royal-indigo text-center py-8 border-t-2 border-primary-gold/30">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-8 mb-6">
+                 <a href="#" target="_blank" class="footer-icon text-gray-400"><span class="sr-only">Instagram</span><svg fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.316 1.363.364 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.316-2.427.364-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.316-1.363-.364-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049 1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.316 2.427-.364C9.79 2.013 10.144 2 12.315 2zM8.447 12.315c0-2.178 1.76-3.938 3.938-3.938s3.938 1.76 3.938 3.938-1.76 3.938-3.938 3.938-3.938-1.76-3.938-3.938zm9.524-5.32c-.622 0-1.125.503-1.125 1.125s.503 1.125 1.125 1.125 1.125-.503 1.125-1.125-.503-1.125-1.125-1.125z" clip-rule="evenodd" /></svg></a>
+                <a href="#" target="_blank" class="footer-icon text-gray-400"><span class="sr-only">Facebook</span><svg fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg></a>
+                <a href="tel:+910000000000" class="footer-icon text-gray-400"><span class="sr-only">Phone</span><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></a>
+            </div>
+            <p class="text-gray-400 text-sm">&copy; 2025 ShaktiNavam. All Rights Reserved.</p>
+            <p class="text-primary-gold text-md mt-2 tracking-wider">Designed & Created by ChethanUrs</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Navbar Logic ---
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinksContainer = document.querySelector('.hidden.md\\:flex.space-x-6');
+        if(navLinksContainer) {
+            mobileMenu.innerHTML = navLinksContainer.innerHTML;
+        }
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- Recipe Card Flip Logic ---
+        const recipeCards = document.querySelectorAll('.recipe-card');
+        recipeCards.forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('is-flipped');
+            });
+        });
+    });
+    </script>
+</body>
+</html>
+

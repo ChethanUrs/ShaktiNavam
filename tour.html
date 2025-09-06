@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ten Days of Dasara - ShaktiNavam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Laila:wght@400;700&family=Teko:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #f7b600;
+            --royal-purple: #4B0082;
+            --deep-red: #8B0000;
+            --royal-indigo: #240046;
+            --dark-bg: #10002b;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Laila', serif;
+            background-color: var(--dark-bg);
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Teko', sans-serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        .navbar {
+            background: rgba(16, 0, 43, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--primary-gold);
+        }
+        .nav-link {
+            position: relative;
+            color: #f0f0f0;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-gold);
+            transition: width 0.3s;
+        }
+        .nav-link:hover {
+            color: var(--primary-gold);
+            text-shadow: 0 0 5px var(--primary-gold);
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .section-container {
+            padding-top: 8rem; 
+            padding-bottom: 5rem;
+        }
+        .section-title {
+            font-size: 4rem;
+            color: var(--primary-gold);
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px var(--primary-gold);
+        }
+         .section-subtitle {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 4rem;
+            color: #e0e0e0;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Flip Card Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 400px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+        }
+        .flip-card.is-flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            border: 2px solid var(--royal-purple);
+            background-color: var(--royal-indigo);
+            padding: 1.5rem;
+        }
+        .flip-card-front {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .flip-card-front h3 {
+            font-size: 2.8rem;
+            color: var(--secondary-gold);
+        }
+        .flip-card-front h4 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .color-badge {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+            overflow-y: auto;
+            text-align: left;
+        }
+        .flip-card-back p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .footer-icon svg { width: 32px; height: 32px; transition: all 0.3s ease; }
+        .footer-icon:hover svg { color: var(--primary-gold); transform: scale(1.2); }
+    </style>
+</head>
+<body>
+    <nav id="navbar" class="navbar fixed top-0 left-0 right-0 z-50 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold text-yellow-400 font-['Teko']">ShaktiNavam</a>
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="planner.html" class="nav-link">Tour Planner</a>
+                <a href="know_more.html" class="nav-link">Know More</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="music_dance.html" class="nav-link">Music & Dance</a>
+                <a href="quiz.html" class="nav-link">Quiz</a>
+                <a href="recipes.html" class="nav-link">Recipes</a>
+                <a href="ask.html" class="nav-link">Ask</a>
+                <a href="parade.html" class="nav-link">Parade</a>
+                <a href="tour.html" class="nav-link">3D Tour</a>
+            </div>
+             <button id="menu-btn" class="md:hidden text-2xl text-white">☰</button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden p-4 space-y-2"></div>
+    </nav>
+
+    <div class="container mx-auto px-4">
+        <section class="section-container">
+            <h2 class="section-title">The Ten Sacred Days</h2>
+            <p class="section-subtitle">Click on any card to discover the divine significance of each day of Navaratri and the triumphant celebration of Vijayadashami, a journey of devotion and color.</p>
+            
+            <div class="card-grid">
+                <!-- Cards will be injected by JS -->
+            </div>
+        </section>
+    </div>
+    
+    <footer class="bg-opacity-50 bg-royal-indigo text-center py-8 border-t-2 border-primary-gold/30">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-8 mb-6">
+                <a href="#" target="_blank" class="footer-icon text-gray-400">
+                    <span class="sr-only">Instagram</span>
+                    <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.316 1.363.364 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.316-2.427.364-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.316-1.363-.364-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.316 2.427-.364C9.79 2.013 10.144 2 12.315 2zM8.447 12.315c0-2.178 1.76-3.938 3.938-3.938s3.938 1.76 3.938 3.938-1.76 3.938-3.938 3.938-3.938-1.76-3.938-3.938zm9.524-5.32c-.622 0-1.125.503-1.125 1.125s.503 1.125 1.125 1.125 1.125-.503 1.125-1.125-.503-1.125-1.125-1.125z" clip-rule="evenodd" /></svg>
+                </a>
+                <a href="#" target="_blank" class="footer-icon text-gray-400">
+                    <span class="sr-only">Facebook</span>
+                    <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                </a>
+                <a href="tel:+910000000000" class="footer-icon text-gray-400">
+                     <span class="sr-only">Phone</span>
+                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                </a>
+            </div>
+            <p class="text-gray-400 text-sm">&copy; 2025 ShaktiNavam. All Rights Reserved.</p>
+            <p class="text-primary-gold text-md mt-2 tracking-wider">Designed & Created by ChethanUrs</p>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dasaraDays = [
+                 { day: "Day 1: Pratipada", goddess: "Shailaputri", color: "#FF8C00", description: ["The first day of Navaratri honors Goddess Shailaputri, the 'Daughter of the Mountains'. She represents the purest form of Shakti, embodying nature, stability, and innocence. Her divine form is depicted riding Nandi the bull, holding a trident in her right hand and a lotus in her left, symbolizing her connection to both power and serenity.", "Worship on this day focuses on grounding one's energy and beginning the spiritual journey of Navaratri with a clear mind and devoted heart. Devotees offer pure ghee to the Goddess, believing it blesses them with a life free from disease and illness.", "The color orange is associated with this day, representing energy, warmth, and enthusiasm. It reflects the vibrant start of the festival and the powerful yet gentle nature of the Goddess, who provides the foundation for the nine nights of spiritual awakening.", "In the context of Mysuru Dasara, this day marks the commencement of royal rituals within the palace. The king, or 'Yajamana', performs special pujas, setting a sacred tone for the grand celebrations that will unfold over the subsequent days."]},
+                { day: "Day 2: Dwitiya", goddess: "Brahmacharini", color: "#FFFFFF", description: ["The second day is dedicated to Goddess Brahmacharini, the ascetic form of Parvati who performed intense penance to win Lord Shiva's heart. She is the embodiment of determination, sacrifice, and the relentless pursuit of spiritual knowledge. Dressed in simple white robes, she holds a rosary (japa mala) and a water pot (kamandalu), signifying her life of meditation and austerity.", "Her worship is believed to enhance one's focus, self-control, and the power of penance. Devotees who meditate on her form are said to gain the strength to overcome any obstacle in their path, making her a symbol of unwavering willpower and spiritual discipline.", "White, the color of this day, represents purity, peace, and sacredness. It perfectly reflects the serene and untainted nature of Goddess Brahmacharini, who walked a path of immense hardship with a calm and focused mind to achieve her divine goal.", "This day continues the sacred rituals within the Mysuru Palace, with the royal family observing traditions that have been passed down for centuries. The atmosphere is one of deep reverence, reflecting the Goddess's own spiritual journey."]},
+                { day: "Day 3: Tritiya", goddess: "Chandraghanta", color: "#FF0000", description: ["On the third day, devotees worship Goddess Chandraghanta, the married form of Parvati. Her name comes from the crescent moon (chandra) on her forehead, which resembles a bell (ghanta). She is a fierce protector, riding a tigress and wielding ten arms that hold various weapons, ready to vanquish evil and establish dharma.", "Her worship instills bravery and courage in the hearts of her devotees, and the sound of the moon-bell on her forehead is said to drive away all demonic and negative forces. She is both a terrifying force to her enemies and a compassionate mother to her followers, blessing them with peace and prosperity.", "The color red is worn on this day, symbolizing her ferocious energy, passion, and power. It represents her readiness for battle against evil and her ability to destroy all obstacles, bringing justice and righteousness to the world.", "The festive spirit in Mysuru begins to build, with cultural programs gaining momentum. The palace rituals continue with deep devotion, honoring the Goddess in her form as a powerful guardian who protects her people from all harm."]},
+                { day: "Day 4: Chaturthi", goddess: "Kushmanda", color: "#00008B", description: ["Goddess Kushmanda is revered on the fourth day. Her name signifies her role as the creator of the universe, or the 'cosmic egg' (brahmanda), which she brought into existence with her divine smile. She is believed to reside in the core of the sun, radiating light and energy throughout the cosmos.", "As the source of all creation, her worship is said to bestow good health, wealth, and strength upon her devotees. It is believed that her divine light can penetrate even the darkest corners, removing ignorance and illuminating the path of wisdom and clarity.", "The color Royal Blue is associated with this day, representing her cosmic energy and divine elegance. This deep, rich color symbolizes her limitless power and her ability to create and sustain the universe with her boundless grace and energy.", "In Mysuru, this day is marked by an increasing number of cultural performances and events. The city is alive with artistic expression, reflecting the creative power of the Goddess herself, who brought forth the universe through her divine will."]},
+                { day: "Day 5: Panchami", goddess: "Skandamata", color: "#FFFF00", description: ["The fifth day of Navaratri is dedicated to Skandamata, the mother of Lord Skanda (also known as Kartikeya), the commander of the divine army. She is depicted holding her infant son in her lap, seated on a lion, symbolizing her control over both maternal love and immense power.", "Worshipping her is doubly auspicious, as it is believed that when one prays to Skandamata, Lord Skanda is automatically revered. She is the embodiment of a mother's pure and selfless love, granting her devotees wisdom, power, and prosperity.", "Yellow, the color of this day, represents brightness, happiness, and optimism. It reflects the radiant joy of motherhood and the divine light that Skandamata brings into the lives of her followers, filling their hearts with warmth and positive energy.", "The festivities in Mysuru are in full swing, with the exhibition grounds and cultural venues bustling with people. The celebration reflects the joy and abundance that the Goddess, in her motherly form, bestows upon the world."]},
+                { day: "Day 6: Shashthi", goddess: "Katyayani", color: "#008000", description: ["Goddess Katyayani, the warrior goddess, is worshipped on the sixth day. She was born from the combined divine energies of the gods to annihilate the demon Mahishasura. Taking birth at the hermitage of Sage Katyayana, she is a formidable form of Shakti, representing the triumph of divine power over demonic forces.", "She is a symbol of righteous anger and the destruction of evil. Devotees pray to her to remove obstacles and to gain the strength to fight against injustice. Her worship is particularly significant for those seeking a suitable life partner, as it is believed she blesses her devotees with a happy marital life.", "Green is the color of this day, symbolizing new beginnings, growth, and fertility. It represents the restoration of dharma and the flourishing of life after the destruction of evil forces by the Goddess.", "This day holds special significance in Mysuru, as it directly connects to the core legend of Dasara. The city, named after Mahishasura, celebrates the power of the Goddess who liberated it from his tyranny, paving the way for prosperity and peace."]},
+                { day: "Day 7: Saptami", goddess: "Kalaratri", color: "#808080", description: ["The seventh day is dedicated to Goddess Kalaratri, the most ferocious form of Goddess Durga. Her appearance is terrifying—dark in complexion with unbound hair and three eyes, she is a formidable sight. Yet, despite her fearsome form, she is deeply benevolent, always protecting her devotees from harm.", "Kalaratri is the destroyer of darkness, ignorance, and all negative energies. Her name itself means the 'death of time', signifying her power over the universe and all its elements. Worshipping her is believed to free one from all fears, including the fear of death, and to remove all obstacles from one's life.", "The color grey is associated with this day, representing the strength to transform and destroy evil. It symbolizes her fierce nature and the power to overcome the darkest of forces, protecting her devotees like a fierce mother.", "As the festival nears its climax, the rituals in Mysuru intensify. The worship of Kalaratri signifies the peak of the battle against Mahishasura, a reminder of the immense power that was required to overcome the forces of adharma."]},
+                { day: "Day 8: Ashtami", goddess: "Mahagauri", color: "#FFC0CB", description: ["On the eighth day, Mahagauri, the embodiment of purity and serenity, is worshipped. After her intense penance as Kalaratri, she gained a radiant white complexion. She rides a white bull and is depicted in a calm, peaceful state, holding a trident and a damaru (a small two-headed drum).", "Mahagauri represents the cleansing of all sins and the purification of the soul. Her serene form has a calming effect on her devotees, and her worship is believed to fulfill all desires and bring relief from worldly suffering. She is the symbol of peace restored after the storm of battle.", "The color Pink is associated with this day, symbolizing hope, purity, and new beginnings. It reflects her serene beauty and the promise of a fresh start after the absolution of past mistakes.", "Ashtami is a day of great significance in Mysuru, often marked by special pujas and rituals like 'Saraswati Puja', where books and instruments of learning are worshipped, invoking the blessings of the goddess of knowledge."]},
+                { day: "Day 9: Navami", goddess: "Siddhidatri", color: "#800080", description: ["The ninth and final night of Navaratri is devoted to Goddess Siddhidatri. She is the bestower of all eight supernatural powers, known as 'siddhis'. It is believed that Lord Shiva attained all these siddhis by her grace, and half of his body became that of the Goddess, earning him the name 'Ardhanarishvara'.", "She is the culmination of all the previous eight forms of Durga, representing the ultimate attainment of spiritual power and perfection. Worshipping her on this day is believed to grant not just spiritual enlightenment but also mastery over worldly desires and attachments.", "Purple, the color of this day, represents ambition, power, and opulence. It signifies the attainment of the highest spiritual and material goals, a fitting color for the Goddess who grants all forms of perfection.", "In Mysuru, this day is celebrated as 'Mahanavami' and is famously known for Ayudha Puja. The royal sword, weapons, and tools of all professions are worshipped, symbolizing respect for the instruments that help sustain life and dharma. The state elephant, horses, and camels are also worshipped on this auspicious day."]},
+                { day: "Day 10: Vijayadashami", goddess: "Victory", color: "#00FFFF", description: ["The tenth day, Vijayadashami, marks the glorious conclusion of the festival. It is the day of victory, celebrating Goddess Chamundeshwari's triumph over the demon Mahishasura. This day symbolizes the ultimate victory of good over evil, light over darkness, and dharma over adharma.", "It is a day of great celebration and procession. In Mysuru, this is the day of the world-famous 'Jamboo Savari' or the Mysuru Dasara Procession. An idol of the Goddess is placed in a magnificent Golden Howdah, weighing over 750 kg, on the back of a decorated elephant, which parades through the city streets.", "The color of this day is often bright and celebratory, like Peacock Green or Turquoise, representing the festive grandeur and the triumph of the divine. It is a day of immense joy, where people exchange Banni leaves as a symbol of gold and good fortune.", "The procession starts from the magnificent Mysuru Palace and culminates at the Bannimantap Grounds, where the Banni tree is worshipped. The day's festivities conclude with the spectacular Torchlight Parade, a dazzling display of equestrian skills, daredevil stunts, and a grand fireworks display, bringing the ten-day celebration to a majestic end."]}
+            ];
+
+            const cardGrid = document.querySelector('.card-grid');
+
+            dasaraDays.forEach((item) => {
+                const card = document.createElement('div');
+                card.className = 'flip-card';
+                card.innerHTML = `
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3>${item.day}</h3>
+                            <h4 class="text-2xl mt-2 flex items-center">
+                                <span class="color-badge" style="background-color: ${item.color};"></span>
+                                ${item.goddess}
+                            </h4>
+                            <p class="mt-4 text-lg">${item.description[0].substring(0, 100)}...</p>
+                            <p class="mt-4 font-bold text-yellow-400">Click to read more</p>
+                        </div>
+                        <div class="flip-card-back" style="color: ${item.color};">
+                           ${item.description.map(p => `<p>${p}</p>`).join('')}
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    card.classList.toggle('is-flipped');
+                });
+                cardGrid.appendChild(card);
+            });
+             // --- Navbar Logic ---
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navLinksContainer = document.querySelector('.navbar .hidden.md\\:flex');
+            if (navLinksContainer) {
+                mobileMenu.innerHTML = navLinksContainer.innerHTML;
+            }
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
+

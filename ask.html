@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Chamundeshwari - ShaktiNavam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Laila:wght@400;700&family=Teko:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #f7b600;
+            --royal-purple: #4B0082;
+            --deep-red: #8B0000;
+            --royal-indigo: #240046;
+            --dark-bg: #10002b;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Laila', serif;
+            background-color: var(--dark-bg);
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Teko', sans-serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        .navbar {
+            background: rgba(16, 0, 43, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--primary-gold);
+        }
+        .nav-link {
+            position: relative;
+            color: #f0f0f0;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-gold);
+            transition: width 0.3s;
+        }
+        .nav-link:hover {
+            color: var(--primary-gold);
+            text-shadow: 0 0 5px var(--primary-gold);
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .section-container {
+            padding-top: 8rem; 
+            padding-bottom: 5rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .section-title {
+            font-size: 4rem;
+            color: var(--primary-gold);
+            text-align: center;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px var(--primary-gold);
+        }
+
+        /* Chatbot Styles */
+        #chat-container {
+            background-color: rgba(36, 0, 70, 0.5);
+            border: 1px solid var(--royal-purple);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+            max-height: 700px;
+        }
+        #chat-header {
+            text-align: center;
+            border-bottom: 1px solid var(--primary-gold);
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+        #chat-header h3 {
+             font-size: 2.5rem;
+             color: var(--secondary-gold);
+        }
+        #chat-window {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        /* Custom scrollbar for chat */
+        #chat-window::-webkit-scrollbar { width: 8px; }
+        #chat-window::-webkit-scrollbar-track { background: var(--royal-indigo); }
+        #chat-window::-webkit-scrollbar-thumb { background-color: var(--royal-purple); border-radius: 10px; border: 2px solid var(--royal-indigo); }
+
+        .chat-message {
+            padding: 0.75rem 1.25rem;
+            border-radius: 15px;
+            max-width: 80%;
+            line-height: 1.6;
+        }
+        .user-message {
+            background-color: var(--royal-purple);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+        .goddess-message {
+            background-color: var(--dark-bg);
+            border: 1px solid var(--primary-gold);
+            color: #f0f0f0;
+            align-self: flex-start;
+            border-top-left-radius: 0;
+        }
+        .typing-indicator {
+            align-self: flex-start;
+            color: var(--primary-gold);
+            font-style: italic;
+        }
+
+        #chat-input-container {
+            display: flex;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--primary-gold);
+        }
+        #user-input {
+            flex-grow: 1;
+            background-color: var(--royal-indigo);
+            border: 1px solid var(--royal-purple);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            color: #f0f0f0;
+        }
+        #user-input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+        }
+        #send-btn {
+            background-color: var(--primary-gold);
+            color: var(--dark-bg);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        #send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--primary-gold);
+        }
+        #suggested-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            justify-content: center;
+        }
+        .suggestion-btn {
+            background-color: transparent;
+            border: 1px solid var(--royal-purple);
+            color: #ccc;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .suggestion-btn:hover {
+            background-color: var(--royal-purple);
+            color: var(--primary-gold);
+        }
+
+
+        /* Footer */
+        .footer-icon svg { width: 32px; height: 32px; transition: all 0.3s ease; }
+        .footer-icon:hover svg { color: var(--primary-gold); transform: scale(1.2); }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar fixed top-0 left-0 right-0 z-50 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold text-yellow-400 font-['Teko']">ShaktiNavam</a>
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="planner.html" class="nav-link">Tour Planner</a>
+                <a href="know_more.html" class="nav-link">Know More</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="music_dance.html" class="nav-link">Music & Dance</a>
+                <a href="quiz.html" class="nav-link">Quiz</a>
+                <a href="recipes.html" class="nav-link">Recipes</a>
+            </div>
+             <button id="menu-btn" class="md:hidden text-2xl text-white">☰</button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden p-4 space-y-2"></div>
+    </nav>
+
+    <div class="container mx-auto px-4">
+        <section id="chatbot-section" class="section-container">
+            
+            <div id="chat-container">
+                <div id="chat-header">
+                    <h3>Ask the Divine Oracle</h3>
+                    <p>Seek wisdom about Mysuru Dasara from Goddess Chamundeshwari</p>
+                </div>
+                <div id="chat-window">
+                    <!-- Chat messages will appear here -->
+                </div>
+                 <div id="suggested-questions">
+                    <!-- Suggestions will appear here -->
+                </div>
+                <div id="chat-input-container">
+                    <input type="text" id="user-input" placeholder="Ask your question here...">
+                    <button id="send-btn">Send</button>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- Footer -->
+     <footer class="bg-opacity-50 bg-royal-indigo text-center py-8 border-t-2 border-primary-gold/30">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-8 mb-6">
+                 <a href="#" target="_blank" class="footer-icon text-gray-400"><span class="sr-only">Instagram</span><svg fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.316 1.363.364 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.316-2.427.364-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.316-1.363-.364-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049 1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.316 2.427-.364C9.79 2.013 10.144 2 12.315 2zM8.447 12.315c0-2.178 1.76-3.938 3.938-3.938s3.938 1.76 3.938 3.938-1.76 3.938-3.938 3.938-3.938-1.76-3.938-3.938zm9.524-5.32c-.622 0-1.125.503-1.125 1.125s.503 1.125 1.125 1.125 1.125-.503 1.125-1.125-.503-1.125-1.125-1.125z" clip-rule="evenodd" /></svg></a>
+                <a href="#" target="_blank" class="footer-icon text-gray-400"><span class="sr-only">Facebook</span><svg fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg></a>
+                <a href="tel:+910000000000" class="footer-icon text-gray-400"><span class="sr-only">Phone</span><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></a>
+            </div>
+            <p class="text-gray-400 text-sm">&copy; 2025 ShaktiNavam. All Rights Reserved.</p>
+            <p class="text-primary-gold text-md mt-2 tracking-wider">Designed & Created by ChethanUrs</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Navbar Logic ---
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinksContainer = document.querySelector('.hidden.md\\:flex.space-x-6');
+        if(navLinksContainer) {
+            mobileMenu.innerHTML = navLinksContainer.innerHTML;
+        }
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- Chatbot Logic ---
+        const chatWindow = document.getElementById('chat-window');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const suggestionsContainer = document.getElementById('suggested-questions');
+
+        const knowledgeBase = {
+            "default": "My child, the mysteries of the universe are vast. Rephrase your query about this sacred festival, and I shall try to enlighten you.",
+            "greeting": "Blessings upon you, devotee. Ask, and I shall share my wisdom about this grand celebration.",
+            "dasara": "Dasara, also known as Navaratri, is a ten-day festival celebrating the triumph of good over evil. It is a time of great devotion, art, and royal pageantry, culminating in the grand Vijayadashami.",
+            "mysuru": "The Wadiyar kings, my devoted patrons, began this tradition centuries ago. The royal heritage continues, making Mysuru Dasara a 'Nada Habba' (state festival) of unparalleled grandeur, with the palace illuminated in my honor.",
+            "jumboo savari": "The Jumboo Savari is the magnificent procession on the final day. A beautifully decorated elephant carries the golden idol of me, the presiding deity, through the streets of Mysuru, a sight of pure devotion and splendor.",
+            "torchlight parade": "The Torchlight Parade, or 'Panjina Kavayathu', is a dazzling spectacle at the Bannimantap grounds. It marks the conclusion of the festivities with equestrian shows, cultural performances, and a breathtaking display of light.",
+            "who are you": "I am the voice of Chamundeshwari, the slayer of the demon Mahishasura, and the guardian deity of this sacred city, Mysuru.",
+            "mahishasura": "Mahishasura was a powerful buffalo demon who could change his form. After he caused chaos upon the earth, I was manifested from the energies of the gods to vanquish him in an epic battle that lasted nine nights.",
+            "ursu": "The Arasu community, the royal lineage of the Wadiyars, are the very architects of modern Mysuru. For centuries, they have been my most devoted patrons. Beyond preserving the grandeur of Dasara, their contributions are etched into the city itself. They built magnificent palaces, established the esteemed University of Mysore, commissioned great projects like the KRS dam, and nurtured art and culture, making Mysuru a beacon of heritage. Their legacy is in the very soul of this city.",
+            "wodeyar": "The Arasu community, the royal lineage of the Wadiyars, are the very architects of modern Mysuru. For centuries, they have been my most devoted patrons. Beyond preserving the grandeur of Dasara, their contributions are etched into the city itself. They built magnificent palaces, established the esteemed University of Mysore, commissioned great projects like the KRS dam, and nurtured art and culture, making Mysuru a beacon of heritage. Their legacy is in the very soul of this city.",
+            "royal family": "The Arasu community, the royal lineage of the Wadiyars, are the very architects of modern Mysuru. For centuries, they have been my most devoted patrons. Beyond preserving the grandeur of Dasara, their contributions are etched into the city itself. They built magnificent palaces, established the esteemed University of Mysore, commissioned great projects like the KRS dam, and nurtured art and culture, making Mysuru a beacon of heritage. Their legacy is in the very soul of this city.",
+            "contribution": "The Arasu community, the royal lineage of the Wadiyars, are the very architects of modern Mysuru. For centuries, they have been my most devoted patrons. Beyond preserving the grandeur of Dasara, their contributions are etched into the city itself. They built magnificent palaces, established the esteemed University of Mysore, commissioned great projects like the KRS dam, and nurtured art and culture, making Mysuru a beacon of heritage. Their legacy is in the very soul of this city."
+        };
+
+        const suggestions = ["What is Dasara?", "Tell me about Jumboo Savari", "Who was Mahishasura?", "Ursu community contributions?"];
+        
+        function addMessage(message, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', `${sender}-message`);
+            messageElement.textContent = message;
+            chatWindow.appendChild(messageElement);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function getResponse(userText) {
+            const cleanText = userText.toLowerCase().trim();
+            if (cleanText.includes("hello") || cleanText.includes("hi") || cleanText.includes("namaste")) return knowledgeBase.greeting;
+            for (const key in knowledgeBase) {
+                if (cleanText.includes(key)) {
+                    return knowledgeBase[key];
+                }
+            }
+            return knowledgeBase.default;
+        }
+
+        function handleSend() {
+            const userText = userInput.value;
+            if (userText.trim() === "") return;
+
+            addMessage(userText, 'user');
+            userInput.value = '';
+
+            // Show typing indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.textContent = 'The goddess is contemplating...';
+            typingIndicator.classList.add('typing-indicator');
+            chatWindow.appendChild(typingIndicator);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            setTimeout(() => {
+                chatWindow.removeChild(typingIndicator);
+                const response = getResponse(userText);
+                addMessage(response, 'goddess');
+            }, 1500);
+        }
+
+        sendBtn.addEventListener('click', handleSend);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSend();
+            }
+        });
+        
+        suggestions.forEach(q => {
+            const btn = document.createElement('button');
+            btn.textContent = q;
+            btn.classList.add('suggestion-btn');
+            btn.addEventListener('click', () => {
+                userInput.value = q;
+                handleSend();
+            });
+            suggestionsContainer.appendChild(btn);
+        });
+
+        // Initial greeting
+        setTimeout(() => {
+             addMessage("Blessings upon you, devotee. What knowledge do you seek about the grand festival of Mysuru?", 'goddess');
+        }, 1000);
+    });
+    </script>
+</body>
+</html>
+
+
+

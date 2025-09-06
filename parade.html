@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Elephant Parade - ShaktiNavam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Laila:wght@400;700&family=Teko:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #f7b600;
+            --royal-purple: #4B0082;
+            --deep-red: #8B0000;
+            --royal-indigo: #240046;
+            --dark-bg: #10002b;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Laila', serif;
+            background-color: var(--dark-bg);
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Teko', sans-serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        .navbar {
+            background: rgba(16, 0, 43, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--primary-gold);
+        }
+        .nav-link {
+            position: relative;
+            color: #f0f0f0;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-gold);
+            transition: width 0.3s;
+        }
+        .nav-link:hover {
+            color: var(--primary-gold);
+            text-shadow: 0 0 5px var(--primary-gold);
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .section-container {
+            padding-top: 8rem; 
+            padding-bottom: 5rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .section-title {
+            font-size: 4rem;
+            color: var(--primary-gold);
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px var(--primary-gold);
+        }
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            color: #e0e0e0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Parade Styles */
+        #parade-container {
+            border-radius: 15px;
+            padding: 4rem 2rem;
+            border: 2px solid var(--primary-gold);
+            text-align: center;
+            width: 100%;
+            max-width: 900px;
+            z-index: 10;
+            position: relative;
+            overflow: hidden; /* Important for the slider */
+        }
+        
+        /* New Background Slider Styles */
+        #background-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+        .slide.active {
+            opacity: 1;
+        }
+        #background-slider::after { /* Overlay for text readability */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(16, 0, 43, 0.8), rgba(16, 0, 43, 0.8));
+            z-index: 1;
+        }
+        #parade-content {
+            position: relative;
+            z-index: 2; /* Content on top of the overlay */
+        }
+        
+        #start-parade-btn {
+            background-color: var(--primary-gold);
+            color: var(--dark-bg);
+            border: none;
+            padding: 1.5rem 3rem;
+            font-size: 2rem;
+            font-family: 'Teko', sans-serif;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        #start-parade-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--primary-gold);
+        }
+        #start-parade-btn:disabled {
+            background-color: #a98c00;
+            cursor: not-allowed;
+            transform: scale(1);
+            box-shadow: none;
+        }
+        
+        .marching-elephant {
+            position: fixed;
+            left: -200px; /* Start off-screen */
+            width: 180px;
+            height: auto;
+            z-index: 5;
+            animation-name: march;
+            animation-timing-function: linear;
+            animation-iteration-count: 1;
+            pointer-events: none;
+        }
+        
+        @keyframes march {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(110vw);
+            }
+        }
+
+        /* SVG Walking Animation */
+        .walking .front-leg {
+            animation: walk-front 1s linear infinite;
+        }
+        .walking .back-leg {
+             animation: walk-back 1s linear infinite;
+        }
+
+        @keyframes walk-front {
+            0%, 100% { transform: rotate(15deg); }
+            50% { transform: rotate(-15deg); }
+        }
+         @keyframes walk-back {
+            0%, 100% { transform: rotate(-15deg); }
+            50% { transform: rotate(15deg); }
+        }
+
+        /* Video Overlay */
+        #video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        #video-overlay.hidden {
+            display: none;
+        }
+        #video-container {
+            position: relative;
+            width: 90%;
+            height: 90vh; /* Control height */
+            max-width: 450px; /* More appropriate for vertical video */
+            aspect-ratio: 9 / 16; /* Vertical "shorts" aspect ratio */
+        }
+        #video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--primary-gold);
+            border-radius: 10px;
+        }
+        #close-video-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-gold);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Footer */
+        .footer-icon svg { width: 32px; height: 32px; transition: all 0.3s ease; }
+        .footer-icon:hover svg { color: var(--primary-gold); transform: scale(1.2); }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar fixed top-0 left-0 right-0 z-50 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold text-yellow-400 font-['Teko']">ShaktiNavam</a>
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="planner.html" class="nav-link">Tour Planner</a>
+                <a href="know_more.html" class="nav-link">Know More</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="music_dance.html" class="nav-link">Music & Dance</a>
+                <a href="quiz.html" class="nav-link">Quiz</a>
+                <a href="recipes.html" class="nav-link">Recipes</a>
+                <a href="ask.html" class="nav-link">Ask</a>
+            </div>
+             <button id="menu-btn" class="md:hidden text-2xl text-white">☰</button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden p-4 space-y-2"></div>
+    </nav>
+
+    <div class="container mx-auto px-4">
+        <section id="parade-section" class="section-container">
+            
+            <div id="parade-container">
+                <div id="background-slider"></div>
+                <div id="parade-content">
+                    <h2 class="section-title">The Virtual Jumboo Savari</h2>
+                    <p class="section-subtitle">Witness the majestic procession as it makes its way from the iconic Mysuru Palace to the Bannimantap grounds. Click the button to start the parade across your screen!</p>
+                    <button id="start-parade-btn">Start the Parade</button>
+                </div>
+            </div>
+            
+            <div id="video-overlay" class="hidden">
+                <div id="video-container">
+                    <button id="close-video-btn">&times;</button>
+                    <div id="youtube-player"></div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- Hidden SVG definition for the elephant -->
+    <div id="elephant-svg-template" style="display: none;">
+        <svg class="walking" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <style>
+                    .body { fill: #8d99ae; }
+                    .blanket { fill: var(--deep-red); }
+                    .gold-trim { fill: none; stroke: var(--primary-gold); stroke-width: 2; }
+                    .tusks { fill: #fefae0; }
+                    .front-leg, .back-leg { transform-origin: 50% 15%; }
+                </style>
+            </defs>
+            <!-- Body and Head -->
+            <path class="body" d="M180,80 C180,50 150,30 120,30 C90,30 70,50 70,80 L70,110 L50,110 C40,110 30,120 30,130 L30,140 C30,150 40,160 50,160 L60,160 L60,130 L70,130 L70,110 C70,100 80,90 90,90 L110,90 C120,90 130,100 130,110 L130,130 L140,130 L140,160 L150,160 C160,160 170,150 170,140 L170,130 C170,120 160,110 150,110 L130,110 L130,80 C130,60 140,40 160,40 C180,40 190,60 190,80 L190,90 C200,90 200,100 190,100 L180,100 L180,80 Z"/>
+            <path class="body" d="M120,30 C110,10 90,0 70,10 C50,20 40,40 50,60 C60,80 80,80 100,70 L120,30 Z"/>
+            <!-- Legs -->
+            <g class="back-leg"><path class="body" d="M75,100 L75,140 C75,150 85,160 95,155 L95,100 Z" /></g>
+            <g class="front-leg"><path class="body" d="M115,100 L115,145 C115,155 125,160 135,150 L135,100 Z" /></g>
+            <!-- Details -->
+            <path class="blanket" d="M70,70 Q120,50 140,70 L140,110 L70,110 Z"/>
+            <path class="gold-trim" d="M70,110 Q120,95 140,110"/>
+            <circle cx="85" cy="45" r="3" fill="#2d3142"/>
+            <path class="tusks" d="M60,60 C40,70 40,90 60,90"/>
+        </svg>
+    </div>
+
+    <!-- Footer -->
+     <footer class="bg-opacity-50 bg-royal-indigo text-center py-8 border-t-2 border-primary-gold/30">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-8 mb-6">
+                 <a href="#" target="_blank" class="footer-icon text-gray-400"><span class="sr-only">Instagram</span><svg fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.316 1.363.364 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.316-2.427.364-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.316-1.363-.364-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049 1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.316 2.427-.364C9.79 2.013 10.144 2 12.315 2zM8.447 12.315c0-2.178 1.76-3.938 3.938-3.938s3.938 1.76 3.938 3.938-1.76 3.938-3.938 3.938-3.938-1.76-3.938-3.938zm9.524-5.32c-.622 0-1.125.503-1.125 1.125s.503 1.125 1.125 1.125 1.125-.503 1.125-1.125-.503-1.125-1.125-1.125z" clip-rule="evenodd" /></svg></a>
+                <a href="#" target="_blank" class="footer-icon text-gray-400"><span class="sr-only">Facebook</span><svg fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg></a>
+                <a href="tel:+910000000000" class="footer-icon text-gray-400"><span class="sr-only">Phone</span><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></a>
+            </div>
+            <p class="text-gray-400 text-sm">&copy; 2025 ShaktiNavam. All Rights Reserved.</p>
+            <p class="text-primary-gold text-md mt-2 tracking-wider">Designed & Created by ChethanUrs</p>
+        </div>
+    </footer>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Navbar Logic ---
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinksContainer = document.querySelector('.hidden.md\\:flex.space-x-6');
+        if(navLinksContainer) {
+            mobileMenu.innerHTML = navLinksContainer.innerHTML;
+        }
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- AR Parade Logic ---
+        const startBtn = document.getElementById('start-parade-btn');
+        const elephantTemplate = document.getElementById('elephant-svg-template').innerHTML;
+        const videoOverlay = document.getElementById('video-overlay');
+        const closeVideoBtn = document.getElementById('close-video-btn');
+
+        // --- Background Slider Logic ---
+        const sliderContainer = document.getElementById('background-slider');
+        const slides = [
+           
+        ];
+        let currentSlide = 0;
+
+        slides.forEach((src, index) => {
+            const slideEl = document.createElement('div');
+            slideEl.className = 'slide';
+            if (index === 0) slideEl.classList.add('active');
+            slideEl.style.backgroundImage = `url('${src}')`;
+            sliderContainer.appendChild(slideEl);
+        });
+
+        const slideElements = document.querySelectorAll('#background-slider .slide');
+
+        setInterval(() => {
+            slideElements[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slideElements[currentSlide].classList.add('active');
+        }, 5000);
+
+        // --- YouTube Player API Logic ---
+        let player;
+        window.onYouTubeIframeAPIReady = function() {
+            player = new YT.Player('youtube-player', {
+                height: '100%',
+                width: '100%',
+                videoId: 'dnubwvwALQ8', 
+                playerVars: {
+                    'playsinline': 1, 'controls': 0, 'showinfo': 0, 'rel': 0, 'autoplay': 1, 'loop': 1, 'playlist': 'dnubwvwALQ8'
+                },
+                 events: { 'onReady': onPlayerReady }
+            });
+        };
+        
+        function onPlayerReady(event) {
+             event.target.stopVideo(); 
+        }
+
+
+        startBtn.addEventListener('click', () => {
+            startBtn.disabled = true;
+            startBtn.textContent = 'Parade in Progress...';
+            
+            videoOverlay.classList.remove('hidden');
+            if (player && typeof player.playVideo === 'function') {
+                player.seekTo(0); 
+                player.playVideo();
+            }
+            
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    createElephant();
+                }, i * 2000);
+            }
+        });
+
+        closeVideoBtn.addEventListener('click', () => {
+            if (player && typeof player.stopVideo === 'function') {
+                player.stopVideo();
+            }
+            videoOverlay.classList.add('hidden');
+            startBtn.disabled = false;
+            startBtn.textContent = 'Start the Parade Again';
+        });
+        
+        function createElephant() {
+            const elephantEl = document.createElement('div');
+            elephantEl.className = 'marching-elephant';
+            elephantEl.innerHTML = elephantTemplate;
+            
+            const topPosition = Math.random() * (window.innerHeight - 250) + 50;
+            const duration = Math.random() * 5 + 10;
+            
+            elephantEl.style.top = `${topPosition}px`;
+            elephantEl.style.animationDuration = `${duration}s`;
+            
+            document.body.appendChild(elephantEl);
+            
+            setTimeout(() => {
+                elephantEl.remove();
+            }, duration * 1000);
+        }
+    });
+    </script>
+</body>
+</html>
+
